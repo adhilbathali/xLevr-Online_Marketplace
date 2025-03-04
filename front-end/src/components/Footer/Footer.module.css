@@ -101,6 +101,7 @@ footer hr{
 
     .footer-top-list{
         margin: 1rem;
+        max-width: fit-content;
     }
 
     .footer hr{
