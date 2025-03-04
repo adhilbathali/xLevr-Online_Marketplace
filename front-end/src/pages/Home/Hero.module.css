@@ -1,0 +1,64 @@
+.hero_container{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+   
+}
+.content_left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    
+   
+}
+.content_left h1{
+    font-size: 3rem;
+    font-weight: 700;
+
+}
+.content_left h6{
+    font-size: 1rem;
+    font-weight: 300;
+    color: grey;
+    margin-left: 2rem;
+}
+.content_right{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btns{
+    display: flex;
+    gap: 50px;
+}
+.btn_left{
+    
+    padding: 15px 20px;
+    background-color:#46A824;
+    color: white;
+    border-radius: 8px;
+    border: 2px solid #46A824;
+}
+.btn_right{
+    padding: 15px 20px;
+    background-color: white;
+    border: 1px solid #f5f5f5;
+    color: #46A824;
+    border: 2px solid #46A824;
+    border-radius: 8px;
+
+}
+
+.img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+.Lottie{
+    height: 500px;
+    width: 600px;
+}
