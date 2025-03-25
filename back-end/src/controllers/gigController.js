@@ -15,6 +15,7 @@ export const postGig = async (req, res) => {
     // Step 3: Update Gig with AI-generated refined filters
     if (refinedFilters) {
       gig.refinedFilters = refinedFilters;
+      gig.studentsQue = [];
       await gig.save();
     }
 
