@@ -1,5 +1,5 @@
 import server from 'express'
-import router from './routes/authRoutes.js'
+import router from './routes/index.js'
 import connectDB from './config/db.js'
 import sessionMiddleware from './middlewares/session.js'
 
@@ -9,7 +9,7 @@ const app = server()
 
 app.use(server.json())
 app.use(sessionMiddleware)
-app.use('/user', router)
+app.use('/', router)
 
 const PORT = process.env.PORT || 5000
 
