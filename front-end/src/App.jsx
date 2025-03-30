@@ -7,6 +7,7 @@ import HowItWorks from './pages/How_It_Works/HowItWorks';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import Footer from './components/Footer/Footer';
+import Chat from './pages/Message/message';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/Chat" element={<Chat />} />
       </Routes>
       <Footer />
     </div>
