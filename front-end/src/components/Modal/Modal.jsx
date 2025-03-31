@@ -11,7 +11,7 @@ function Modal({ isOpen, onClose, children }) {
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
         <button className={styles.closeButton} onClick={onClose}>
-          Close
+          X
         </button>
       </div>
     </div>

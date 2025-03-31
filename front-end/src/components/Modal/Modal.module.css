@@ -31,7 +31,9 @@
     border: none;
     font-size: 1.2em;
     cursor: pointer;
-    color: #333; /* Adjust color as needed */
+    color: #333;
+    font-weight: bold;
+    /* Adjust color as needed */
   }
   .closeButton:focus{
     outline: none;

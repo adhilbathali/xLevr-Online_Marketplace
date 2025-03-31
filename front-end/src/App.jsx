@@ -7,6 +7,8 @@ import HowItWorks from './pages/How_It_Works/HowItWorks';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import Footer from './components/Footer/Footer';
+import StudentRegister from './components/Auth/Student_register';
+import StudentDashboard from './pages/Student_Dashboard/StudentDashboard';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/student-register" element={<StudentRegister/>} />
+        <Route path="/student-dashboard" element={<StudentDashboard/>} />
       </Routes>
       <Footer />
     </div>

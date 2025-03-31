@@ -1,0 +1,160 @@
+/* StudentDashboard.module.css */
+.dashboardContainer {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+.dashboardContainer h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.dashboardSection {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboardSection h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.profileSummary {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; /* Space between image and info */
+}
+
+.profilePic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures image covers the area nicely */
+}
+
+.profileInfo h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.profileInfo p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.skillsPreview {
+    font-size: 0.9em;
+    color: #777;
+}
+
+.editProfileButton {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.editProfileButton:hover {
+    background-color: #0056b3;
+}
+
+.projectList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+.projectCard {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.projectCard h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #444;
+}
+
+.projectCard p {
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.projectCard .description {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.actionButtons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+.button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: opacity 0.2s ease;
+}
+
+.button:hover {
+    opacity: 0.85;
+}
+
+.accept {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+.reject {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+
+.detailsLink {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.detailsLink:hover {
+    text-decoration: underline;
+}
+
+
+.loading, .error { /* Keep these styles for when you add API calls back */
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2em;
+    color: #777;
+}
+
+.error {
+    color: #dc3545;
+}

@@ -28,7 +28,7 @@ function Navbar() {
     };
 
     const handleJoinAsStudent = () => {
-      navigate('/signup?role=student'); // Navigate with query parameter
+      navigate('/student-register'); // Navigate with query parameter
       closeModal();
       closeMenu()
     };
@@ -84,11 +84,11 @@ function Navbar() {
             </div>
 
             {/* Modal */}
-            <Modal isOpen={modalOpen} onClose={closeModal}>
+            <Modal className={styles.modal} isOpen={modalOpen} onClose={closeModal}>
                 <h2>Join as...</h2>
                 <p>Are you a student or a professional?</p>
-                <button onClick={handleJoinAsStudent}>Join as Student</button>
-                <button onClick={handleJoinAsProfessional}>Join as Professional</button>
+                <button className={styles.modal_btn} onClick={handleJoinAsStudent}>Join as Student</button>
+                <button className={styles.modal_btn} onClick={handleJoinAsProfessional}>Join as Professional</button>
             </Modal>
         </nav>
     );
