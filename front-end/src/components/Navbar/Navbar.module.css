@@ -153,4 +153,13 @@
       z-index: 100;
     }
   }
+
+.modal_btn{
+  padding: 20px;
+  background: #118BB4;
+    color: white;
+  border: none;
+  margin:10px;
+  border-radius: 8px ;
+}
   
