@@ -1,19 +1,22 @@
-import server from 'express'
-import router from './routes/index.js'
-import connectDB from './config/db.js'
-import sessionMiddleware from './middlewares/session.js'
+// server.js
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+require('dotenv').config();
+const connectDB = require('./config/db');
+const mainRouter = require('./routes/index'); // Requires the exported router from index.js
 
+connectDB();
+const app = express();
 
-connectDB()
-const app = server()
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(server.json())
-app.use(sessionMiddleware)
-app.use('/', router)
+// Mount the entire router at the root path '/'
+app.use('/', mainRouter); // This should now receive a valid router function
 
-const PORT = process.env.PORT || 5000
-
-app.listen(PORT, ()=>{
-    console.log(`app is listening to PORT ${PORT}`)
-})
-
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+});

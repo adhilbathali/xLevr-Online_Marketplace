@@ -8,6 +8,9 @@ import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import Footer from './components/Footer/Footer';
 import Chat from './pages/Message/message';
+import StudentRegister from './components/Auth/Student_register';
+import StudentDashboard from './pages/Student_Dashboard/StudentDashboard';
+
 
 function App() {
   return (
@@ -20,6 +23,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/Chat" element={<Chat />} />
+        <Route path="/student-register" element={<StudentRegister/>} />
+        <Route path="/student-dashboard" element={<StudentDashboard/>} />
       </Routes>
       <Footer />
     </div>
