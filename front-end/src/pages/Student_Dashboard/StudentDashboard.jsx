@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; // Removed useEffect for demo
 import { Link } from 'react-router-dom'; // Removed useNavigate if not used elsewhere
 import styles from './StudentDashboard.module.css';
+import { MessageSquare } from 'lucide-react';// Icon-library
 
 // --- DEMO Placeholder Data ---
 const placeholderProfile = {
@@ -131,18 +132,26 @@ function StudentDashboard() {
 
             {/* --- Active Projects Section --- */}
             <section className={styles.dashboardSection}>
-                <h2>My Active Projects</h2>
+                 <h2>My Active Projects</h2>
                 {activeProjects.length === 0 ? (
                     <p>You have no active projects right now.</p>
                 ) : (
-                     <div className={styles.projectList}>
+                    <div className={styles.projectList}>
                         {activeProjects.map((proj) => (
                             <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
-                                <h3>{proj.title}</h3>
+                                <div className={styles.cardHeader}>
+                                    <h3>{proj.title}</h3>
+                                    <Link
+                                        to={`/chat/`}
+                                        className={styles.msgLink}
+                                        title={`Message ${proj.clientName}`}
+                                    >
+                                        <MessageSquare size={20} />
+                                    </Link>
+                                </div>
                                 <p><strong>Client:</strong> {proj.clientName}</p>
                                 <p><strong>Deadline:</strong> {proj.deadline}</p>
                                 <p><strong>Status:</strong> {proj.status}</p>
-                                {/* Link still works if you have routing set up */}
                                 <Link to={proj.workspaceUrl} className={styles.detailsLink}>
                                     View Details / Workspace
                                 </Link>
@@ -151,6 +160,7 @@ function StudentDashboard() {
                     </div>
                 )}
             </section>
+
 
             {/* --- Completed Projects Section --- */}
             <section className={styles.dashboardSection}>

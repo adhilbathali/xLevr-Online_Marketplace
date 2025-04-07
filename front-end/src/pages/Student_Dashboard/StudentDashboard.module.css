@@ -158,3 +158,20 @@
 .error {
     color: #dc3545;
 }
+
+/* -------------MSG-Icon-CSS----------------------- */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.msgLink {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.msgLink:hover {
+    color: #007bff;
+}
