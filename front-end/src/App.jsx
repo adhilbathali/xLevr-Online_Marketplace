@@ -9,6 +9,7 @@ import Signup from './components/Auth/Signup';
 import Footer from './components/Footer/Footer';
 import StudentRegister from './components/Auth/Student_register';
 import StudentDashboard from './pages/Student_Dashboard/StudentDashboard';
+import Require from './pages/RequirementForm/Require';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/student-register" element={<StudentRegister/>} />
         <Route path="/student-dashboard" element={<StudentDashboard/>} />
+        <Route path='/require' element={<Require/>} />
       </Routes>
       <Footer />
     </div>
