@@ -1,7 +1,7 @@
-import {genAI} from "../config/googleGenAI.js";
-import getRemainingDays from "../utils/getDeadline.js";
+const { genAI } = require("../config/googleGenAI.js");
+const getRemainingDays = require("../utils/getDeadline.js");
 
-export const generateRefinedFilters = async (gigData) => {
+const generateRefinedFilters = async (gigData) => {
 
     const remainingDays = getRemainingDays(gigData.deadline);
     try {
@@ -55,4 +55,6 @@ export const generateRefinedFilters = async (gigData) => {
       throw new Error("Failed to process refined filters using Google AI.");
     }
   };
+
+  module.exports = { generateRefinedFilters };
   

@@ -1,14 +1,14 @@
-import Gig from "../models/gigModel.js";
-import { generateRefinedFilters } from "../services/googleAIService.js";
+const Gig = require("../models/gigModel.js");
+const { generateRefinedFilters } = require("../services/googleAIService.js");
 
-export const postGig = async (req, res) => {
+const postGig = async (req, res) => {
   try {
     const gigData = req.body;
 
     // Step 1: Save the Gig in MongoDB
     const gig = new Gig(gigData);
     await gig.save();
-
+    
     // Step 2: Generate AI-based Refined Filters
     const refinedFilters = await generateRefinedFilters(gigData);
 
@@ -30,3 +30,5 @@ export const postGig = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
+
+module.exports = { postGig };

@@ -1,5 +1,4 @@
-import { checkSchema } from "express-validator";
-
+const { checkSchema } = require("express-validator");
 const gigValidationSchema = checkSchema({
   category: {
     in: ["body"],
@@ -62,4 +61,4 @@ const gigValidationSchema = checkSchema({
   },
 });
 
-export default gigValidationSchema;
+module.exports = gigValidationSchema;
