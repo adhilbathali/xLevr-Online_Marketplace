@@ -1,10 +1,9 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const gigSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Development", "Design", "Writing", "Marketing"],
   },
   companyTitle: {
     type: String,
@@ -31,7 +30,7 @@ const gigSchema = new mongoose.Schema({
     required: true,
   },
   referenceLinks: {
-    type: [String], 
+    type: [String],
   },
   additionalNotes: {
     type: String,
@@ -44,4 +43,4 @@ const gigSchema = new mongoose.Schema({
 
 const Gig = mongoose.model("Gig", gigSchema);
 
-export default Gig;
+module.exports = Gig;

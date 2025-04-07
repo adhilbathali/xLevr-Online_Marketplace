@@ -8,6 +8,7 @@ import HowItWorks from './pages/How_It_Works/HowItWorks';
 import Login from './components/Auth/Login'; // Assuming this is your student login component path
 import Signup from './components/Auth/Signup';
 import Footer from './components/Footer/Footer';
+import Require from './pages/RequirementForm/Require';
 import Chat from './pages/Message/message';
 import StudentRegister from './components/Auth/Student_register'; // Ensure path is correct
 import StudentDashboard from './pages/Student_Dashboard/StudentDashboard'; // Ensure path is correct
@@ -26,8 +27,10 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/login" element={<Login />} /> {/* Student login route */}
         <Route path="/signup" element={<Signup />} />
+        <Route path="/student-register" element={<StudentRegister/>} />
+        <Route path="/student-dashboard" element={<StudentDashboard/>} />
+        <Route path='/require' element={<Require/>} />
         <Route path="/Chat" element={<Chat />} />
-        <Route path="/student-register" element={<StudentRegister />} />
 
         {/* --- Protected Student Route --- */}
         <Route

@@ -1,10 +1,10 @@
-import express from "express";
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-import { postGig } from "../controllers/gigController.js";
-import gigValidationSchema from "../validations/gigValidation.js";
-import checkValidationError from "../middlewares/checkValidationError.js";
+const { postGig } = require("../controllers/gigController");
+const gigValidationSchema = require("../validations/gigValidation");
+const checkValidationError = require("../middlewares/checkValidationError");
 
-router.route('/postgig').post(gigValidationSchema, checkValidationError, postGig)
+router.route('/postgig').post(gigValidationSchema, checkValidationError, postGig);
 
-export default router
+module.exports = router;

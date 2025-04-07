@@ -1,0 +1,72 @@
+.categories-container {
+    padding: 5rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .categories-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #222;
+  }
+  
+  /* Search Input */
+  .searchInput {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 18px;
+    margin: 0 auto 2rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    display: block;
+  }
+  
+  .searchInput:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  }
+  
+  /* Grid Container */
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 100px));
+    gap: 5rem;
+    padding: 4rem;
+  }
+  
+  /* Category Card */
+  .category {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    min-height: 200px;
+    max-width: 200px;
+  }
+  
+  .category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 0.75rem;
+  }
+  
+  .category h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 0.5rem;
+  }
+  

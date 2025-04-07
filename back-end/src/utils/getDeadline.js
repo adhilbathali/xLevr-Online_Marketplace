@@ -8,4 +8,4 @@ function getRemainingDays(deadline) {
     return daysRemaining > 0 ? daysRemaining : 0; // Return 0 if deadline has passed
 }
 
-export default getRemainingDays
+module.exports = getRemainingDays;
