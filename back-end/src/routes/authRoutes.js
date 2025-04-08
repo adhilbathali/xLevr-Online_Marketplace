@@ -10,7 +10,7 @@ const multer = require('multer'); // For student registration specifically
 // --- Import Models ---
 const StudentUser = require('../models/student_user'); // For student-specific data
 const User = require('../models/user');          // Generic User model
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddlewares');
 
 console.log("--- routes/authRoutes.js executing ---");
 

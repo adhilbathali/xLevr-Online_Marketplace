@@ -46,7 +46,7 @@ module.exports = function(req, res, next) {
         }
 
         req.user = decoded.user; // Attach user info (like { id: '...', role: '...' })
-        console.log(`Auth Middlewares: Token verified for user ID ${req.user.id}`); // Log success
+        console.log(`Auth Middleware: Token verified for user ID ${req.user.id}`); // Log success
         next(); // Move to the next middleware or route handler
 
     } catch (err) {

@@ -71,7 +71,7 @@ function Login() {
       const userRole = response.data.user.role;
       if (userRole === 'student') {
         console.log("Navigating to Student Dashboard...");
-        navigate('/student-dashboard'); // Redirect student
+        navigate('/student/dashboard'); // Redirect student
       } else if (userRole === 'professional') {
         console.log("Navigating to Professional Dashboard...");
         navigate('/professional/dashboard'); // Redirect professional
