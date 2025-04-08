@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     default: 'pending',
   },
   createdAt: { type: Date, default: Date.now },
+  skills: [String],
+pastCompletedSkills: [String],
+expertise: Number,
+completionSpeed: Number
 });
 
 module.exports = mongoose.model('student_user', UserSchema);

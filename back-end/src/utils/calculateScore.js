@@ -1,4 +1,4 @@
-export function calculateStudentScore(student, refinedFilters) {
+function calculateStudentScore(student, refinedFilters) {
     const { RS, Req_CS, Req_EXL } = refinedFilters;
     
     // Count Matched Skills
@@ -22,18 +22,4 @@ export function calculateStudentScore(student, refinedFilters) {
     return score;
 }
 
-export function getTopStudents(students, refinedFilters) {
-    // Calculate scores for all students
-    const scoredStudents = students.map(student => ({
-        ...student,
-        score: calculateStudentScore(student, refinedFilters)
-    }));
-
-    // Sort students by score in descending order
-    scoredStudents.sort((a, b) => b.score - a.score);
-
-    // Get the top 10 students
-    const topStudents = scoredStudents.slice(0, 10);
-
-    return topStudents;
-}
+module.exports = calculateStudentScore;

@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const path = require('path'); // Import the path module
 
-// Construct the absolute path to the .env file located in the parent ('src') directory
-const envPath = path.resolve(__dirname, '../.env');
-console.log(`Loading .env file from: ${envPath}`); // Log the path for debugging
-require('dotenv').config({ path: envPath });
+ // Log the path for debugging
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
