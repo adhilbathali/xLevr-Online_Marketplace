@@ -1,5 +1,11 @@
+import Hero from "./Hero"
+import CategoryGrid from "./CatogoryGrid"
+
 export default function Categories(){
     return(
-        <h1>Iam Categories</h1>
+        <>
+            <Hero/>
+            <CategoryGrid/>
+        </>
     )
 }

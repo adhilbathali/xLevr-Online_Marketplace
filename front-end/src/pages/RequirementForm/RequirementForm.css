@@ -1,0 +1,94 @@
+.form-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fefefe;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  input[type="text"],
+  input[type="url"],
+  input[type="date"] {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  .array-field {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .array-field input {
+    flex: 1;
+  }
+  
+  .array-field button {
+    padding: 0.4rem 0.8rem;
+    background-color: #eee;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .array-field button:hover {
+    background-color: #ddd;
+  }
+  
+  button[type="button"] {
+    margin-top: 0.3rem;
+    background-color: #f0f0f0;
+    border: 1px solid #bbb;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #0077cc;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .submit-btn:hover {
+    background-color: #005fa3;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  
