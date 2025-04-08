@@ -142,7 +142,8 @@ function StudentDashboard() {
                                 <div className={styles.cardHeader}>
                                     <h3>{proj.title}</h3>
                                     <Link
-                                        to={`/chat/`}
+                                        to={`/chat/`} //add this when the back end is connected  to={`/chat/${proj.clientId}`}
+
                                         className={styles.msgLink}
                                         title={`Message ${proj.clientName}`}
                                     >
