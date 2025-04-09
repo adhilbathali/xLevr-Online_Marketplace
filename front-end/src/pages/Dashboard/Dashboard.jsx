@@ -2,6 +2,7 @@
 // *** FINAL VERSION: Fetches user data, renders full UI conditionally ***
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 // Ensure the CSS module import is correct and uncommented
 import styles from './Dashboard.module.css';
@@ -31,9 +32,29 @@ function Dashboard() {
     const navigate = useNavigate(); // Keep for potential error redirects
 
     // Demo project states
-    const [invitations, setInvitations] = useState(initialInvitations);
-    const [activeProjects, setActiveProjects] = useState(initialActiveProjects);
-    const [completedProjects, setCompletedProjects] = useState(initialCompletedProjects);
+    const [invitations, setInvitations] = useState([]);
+    const [activeProjects, setActiveProjects] = useState([]);
+    const [completedProjects, setCompletedProjects] = useState([]);
+
+
+    useEffect(() => {
+        // Get user object from localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const userId = JSON.parse(localStorage.getItem("user")).id;
+    
+          // Fetch data using userId
+          axios.get(`http://localhost:5000/api/student/dashboard/${userId}`)
+            .then(response => {
+                const { notifiedGigs, acceptedGigs } = response.data;
+                setInvitations(notifiedGigs);
+                setActiveProjects(acceptedGigs);
+            })
+            .catch(error => {
+              console.error('Error fetching dashboard data:', error);
+            });
+        }
+      }, []);
 
     useEffect(() => {
         // console.log("Dashboard mounting. Fetching user data..."); // Keep logs if helpful

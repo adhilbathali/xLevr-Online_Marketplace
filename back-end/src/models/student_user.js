@@ -66,8 +66,21 @@ const StudentUserSchema = new mongoose.Schema({
     // If you need email verification later, add fields like:
     // verificationToken: String,
     // verificationTokenExpires: Date,
-
-}, {
+    skills: [String],
+pastCompletedSkills: [String],
+expertise: Number,
+completionSpeed: Number,
+walletBalance: {
+    type: Number,
+    default: 0
+  },
+  role: {
+    type: String,
+    required: [true, 'User role is required.'],
+    default: 'student'
+}
+},
+ {
     timestamps: true // Adds createdAt and updatedAt automatically
 });
 

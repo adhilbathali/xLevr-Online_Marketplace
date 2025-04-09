@@ -33,6 +33,16 @@ const mainRouter = require('./routes/index'); // Assuming index.js is in src/rou
 // --- Connect to Database ---
 // connectDB() will now use the MONGO_URI loaded above
 connectDB();
+
+const cron = require("node-cron");
+const processHybridQueue = require("./services/cron/hybridQueManagement");
+
+cron.schedule("0 * * * *", async () => {
+  console.log("⏰ Cron job triggered!");
+  await processHybridQueue();
+  console.log("✅ Batch rotation check completed.");
+});
+
 // --- End Connect DB ---
 
 

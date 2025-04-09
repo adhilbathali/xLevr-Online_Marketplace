@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RequirementForm.css";
 
+const userID = JSON.parse(localStorage.getItem("user")).id;
+console.log(userID);
+
 const initialForm = {
+  createdBy: userID,
   category: "",
   companyTitle: "",
   projectTitle: "",
