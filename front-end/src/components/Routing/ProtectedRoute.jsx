@@ -1,26 +1,31 @@
 // src/components/Routing/ProtectedRoute.js
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+// *** CORRECTED to use Outlet for v6 wrapper routes ***
 
-const ProtectedRoute = ({ children }) => {
+import React from 'react';
+// Import Outlet and Navigate from react-router-dom
+import { Navigate, Outlet } from 'react-router-dom';
+// Optional: import useLocation if you want to redirect back after login
+// import { useLocation } from 'react-router-dom';
+
+const ProtectedRoute = () => { // No need for children prop here
   // 1. Check if the authentication token exists in local storage
+  // Ensure 'authToken' is the EXACT key used in Login.jsx
   const token = localStorage.getItem('authToken');
 
-  // 2. Get the current location (optional, but can be useful for redirecting back after login)
-  // import { useLocation } from 'react-router-dom';
+  // Optional: Get current location to redirect back after login
   // const location = useLocation();
 
   if (!token) {
-    // 3. If no token, redirect the user to the login page
-    //    'replace' prevents adding the redirected route to the history stack
-    //    'state' can optionally pass the original location to redirect back after login
-    console.log('ProtectedRoute: No token found, redirecting to /login'); // For debugging
-    return <Navigate to="/login" replace /* state={{ from: location }} */ />;
+    // 2. If no token, redirect the user to the login page
+    console.log('ProtectedRoute: No token found, redirecting to /login');
+    // Pass the original location in state if desired
+    // return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to="/login" replace />;
   }
 
-  // 4. If token exists, render the child component (the actual protected page)
-  console.log('ProtectedRoute: Token found, rendering requested component.'); // For debugging
-  return children;
+  // 3. If token exists, render the child route's element via <Outlet />
+  console.log('ProtectedRoute: Token found, rendering child route via <Outlet />.');
+  return <Outlet />; // Renders the matched nested route component (e.g., <Dashboard />)
 };
 
 export default ProtectedRoute;

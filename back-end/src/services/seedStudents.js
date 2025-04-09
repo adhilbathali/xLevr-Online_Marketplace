@@ -1,8 +1,9 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Student = require("../models/student_user");
+const bcrypt = require('bcryptjs')
+const faker = require("faker");
+const StudentUser = require("../models/student_user");
 
-// Connect to MongoDB using env variable
 const mongoUri = process.env.MONGO_URI;
 
 const skillPool = [
@@ -17,24 +18,23 @@ function getRandomSkills() {
   return shuffled.slice(0, Math.floor(Math.random() * 5) + 1);
 }
 
-function generateStudent(index) {
-  const firstNames = ["Alex", "Jamie", "Taylor", "Jordan", "Morgan", "Casey"];
-  const lastNames = ["Lee", "Kim", "Patel", "Sharma", "Ali", "Fernandez"];
-
-  const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+async function generateStudent() {
+  const plainPassword = faker.internet.password();
+  const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
   return {
-    firstName,
-    lastName,
-    email: `${firstName.toLowerCase()}${lastName.toLowerCase()}${index}@example.com`,
-    password: "hashedpassword", // Replace with hash if needed
-    university: "XLevr University",
-    graduationYear: 2025 + Math.floor(Math.random() * 4),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: hashedPassword,
+    university: faker.company.companyName() + " University",
+    graduationYear: faker.datatype.number({ min: 2023, max: 2028 }).toString(),
+    idCardPhotoPath: faker.image.imageUrl(), // Simulated ID photo
     skills: getRandomSkills(),
     pastCompletedSkills: getRandomSkills(),
-    expertise: Math.floor(Math.random() * 10) + 1,
-    completionSpeed: Math.floor(Math.random() * 30) + 1
+    expertise: faker.datatype.number({ min: 1, max: 10 }),
+    completionSpeed: faker.datatype.number({ min: 1, max: 30 }),
+    isVerified: faker.datatype.boolean()
   };
 }
 
@@ -44,18 +44,24 @@ async function seedStudents() {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-    console.log("✅ Connected to MongoDB");
 
-    await Student.deleteMany({});
-    console.log("🧹 Cleared existing students");
+    console.log("✅ Connected to MongoDB Atlas");
 
-    const students = Array.from({ length: 100 }, (_, i) => generateStudent(i + 1));
-    await Student.insertMany(students);
+    await StudentUser.deleteMany({});
+    console.log("🧹 Cleared student_users collection");
 
-    console.log("🎉 Successfully added 100 test students!");
+    const students = [];
+    for (let i = 0; i < 100; i++) {
+      const student = await generateStudent();
+      students.push(student);
+    }
+
+    await StudentUser.insertMany(students);
+    console.log("🎉 100 students added with hashed passwords!");
+
     mongoose.connection.close();
-  } catch (error) {
-    console.error("❌ Error seeding students:", error);
+  } catch (err) {
+    console.error("❌ Error seeding students:", err);
     process.exit(1);
   }
 }

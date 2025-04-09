@@ -7,6 +7,18 @@ const connectDB = require('./config/db');
 const mainRouter = require('./routes/index'); // Requires the exported router from index.js
 
 connectDB();
+
+const cron = require("node-cron");
+const processHybridQueue = require("./services/cron/hybridQueManagement");
+
+cron.schedule("0 * * * *", async () => {
+  console.log("⏰ Cron job triggered!");
+  await processHybridQueue();
+  console.log("✅ Batch rotation check completed.");
+});
+
+
+
 const app = express();
 
 app.use(cors());

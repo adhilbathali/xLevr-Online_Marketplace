@@ -18,6 +18,7 @@ const postGig = async (req, res) => {
     // Step 2: Generate AI-based Refined Filters
     const refinedFilters = await generateRefinedFilters(gigData);
 
+
     // Step 3: Update Gig with AI-generated refined filters
     if (refinedFilters) {
       gig.refinedFilters = refinedFilters;
@@ -25,6 +26,8 @@ const postGig = async (req, res) => {
       gig.topMatchedStudents = topStudents.map(s => s._id); 
       await gig.save();
     }
+
+    gig.offerExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     // Step 4: Respond
     res.status(201).json({
