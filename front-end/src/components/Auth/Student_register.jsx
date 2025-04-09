@@ -1,41 +1,33 @@
-import React, { useState, useRef } from 'react'; // Import useRef for potential form reset
+import React, { useState, useRef } from 'react';
 import styles from './Student_register.module.css';
 
 function StudentRegistrationForm() {
     // --- State ---
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        university: '', // Default to empty or the first option's value if needed
-        studentId: '',
-        graduationYear: '',
-        idCardPhoto: null,
+        firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
+        university: '', studentId: '', graduationYear: '', idCardPhoto: null,
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
-    const formRef = useRef(null); // Ref for accessing the form element if needed for reset
+    const formRef = useRef(null);
 
     // --- Configuration ---
-    // TODO: Move to environment variable (e.g., process.env.REACT_APP_API_URL) for build/deployment
-    const API_BASE_URL = 'http://localhost:5000';
+    // TODO: Move to environment variable (e.g., process.env.REACT_APP_API_URL)
+    const API_BASE_URL = 'http://localhost:5000'; // Make sure this matches your backend port
 
     // TODO: Fetch this list from an API or config file
     const universities = [
-        { name: "Select University", value: "" }, // Use value for the state
+        { name: "Select University", value: "" },
         { name: "University of Example", value: "University of Example" },
         { name: "State University", value: "State University" },
         { name: "Another College", value: "Another College" },
-        // Add More Universities
     ];
 
     // --- Validation ---
     const validateForm = () => {
         const newErrors = {};
-        // (Validation logic remains the same - it's solid)
+        // (Keep your existing validation logic - it's good)
         if (!formData.firstName.trim()) newErrors.firstName = 'First name is required.';
         if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required.';
         if (!formData.email.trim()) {
@@ -43,15 +35,15 @@ function StudentRegistrationForm() {
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = 'Invalid email format.';
         }
-        if (!formData.password) { // Check password presence directly
+        if (!formData.password) {
             newErrors.password = 'Password is required.';
-        } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 8 characters.';
+        } else if (formData.password.length < 6) { // Matching backend requirement
+            newErrors.password = 'Password must be at least 6 characters.';
         }
         if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match.';
         }
-        if (!formData.university) { // Check if a university is selected
+        if (!formData.university) {
              newErrors.university = 'University is required.';
         }
         if (!formData.idCardPhoto) {
@@ -73,89 +65,127 @@ function StudentRegistrationForm() {
             ...prevData,
             [name]: type === 'file' ? files[0] : value,
         }));
-        // Optionally clear the specific field's error when the user types
         if (errors[name]) {
             setErrors(prevErrors => ({ ...prevErrors, [name]: null }));
         }
+        // Clear server error on any change
+        if (errors.server) {
+            setErrors(prevErrors => ({ ...prevErrors, server: null }));
+        }
+        // Clear success message on change
+        if (successMessage) {
+            setSuccessMessage('');
+        }
     };
 
+    // --- *** CORRECTED handleSubmit *** ---
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSuccessMessage(''); // Clear previous success message
+        setErrors({}); // Clear previous errors
 
         if (!validateForm()) {
-            console.log("Client-side validation failed:", errors); // Log validation errors
+            console.log("Client-side validation failed");
             return;
         }
 
         setLoading(true);
-        setSuccessMessage('');
-        setErrors({});
 
         // Create FormData
         const data = new FormData();
-        // Use Object.entries for slightly cleaner iteration
         Object.entries(formData).forEach(([key, value]) => {
-            if (value !== null) { // Don't append null values (like initial idCardPhoto)
+            // Only append if value is not null or undefined
+            // Note: Empty strings for optional fields are fine to send
+            if (value !== null && value !== undefined) {
                 data.append(key, value);
             }
         });
 
-        console.log("Submitting FormData..."); // Log before fetch
+        const requestUrl = `${API_BASE_URL}/api/auth/register/student`;
+        console.log(`Submitting FormData to: ${requestUrl}`);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/auth/register/student`, {
+            const response = await fetch(requestUrl, {
                 method: 'POST',
                 body: data,
+                // No 'Content-Type' header needed for FormData; browser sets it with boundary
             });
 
-            console.log("Response status:", response.status); // Log response status
+            console.log("Response Status:", response.status, response.statusText); // Log status
 
-            if (response.ok) {
-                setSuccessMessage('Registration successful! Please check your email to verify your account.');
-                // Reset form state completely
-                setFormData({
+            // --- Robust Response Body Handling ---
+            let responseData = null;
+            let responseText = ''; // Store text response as fallback
+            const contentType = response.headers.get("content-type");
+
+            try {
+                // Try to read the body ONCE. Prefer JSON if available.
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                     responseData = await response.json(); // Reads the body
+                     console.log("Parsed JSON Response:", responseData);
+                } else {
+                     responseText = await response.text(); // Reads the body
+                     console.log("Received Text Response:", responseText);
+                     // Attempt to parse if it looks like JSON, otherwise keep as text
+                     try {
+                         responseData = JSON.parse(responseText);
+                     } catch (parseError) {
+                         console.log("Response text was not valid JSON.");
+                     }
+                }
+            } catch (bodyError) {
+                // This catch block handles errors during the body reading itself
+                // (e.g., network interruption during body read)
+                // It does NOT handle the "body already read" error, as we prevent that by reading only once.
+                console.error("Error reading response body:", bodyError);
+                // Keep responseData as null or handle as needed
+            }
+            // --- End Response Body Handling ---
+
+
+            if (response.ok) { // Check status code 200-299
+                setSuccessMessage(responseData?.message || 'Registration successful! Please check your email to verify your account.');
+                setFormData({ // Reset form state
                     firstName: '', lastName: '', email: '', password: '', confirmPassword: '',
                     university: '', studentId: '', graduationYear: '', idCardPhoto: null
                 });
-                // Reset the file input visually (optional, might need ref if state reset isn't enough)
                 if (formRef.current) {
-                    formRef.current.reset(); // Resets the entire form element
+                    formRef.current.reset(); // Reset native form element (clears file input)
                 }
 
             } else {
-                // Handle non-OK responses
-                let errorMessage = `Registration failed. Status: ${response.status}`; // Default message
-                try {
-                    const errorData = await response.json();
-                    console.error("Backend error response:", errorData); // Log backend error
-                    // Prioritize specific message, then array of errors, then default
-                    errorMessage = errorData.message ||
-                                   (errorData.errors ? errorData.errors.map(err => err.msg).join(', ') : errorMessage);
-                } catch (jsonError) {
-                    // The error response wasn't JSON
-                    const textResponse = await response.text(); // Get text response if not JSON
-                    console.error("Could not parse error response as JSON. Status:", response.status, "Response Text:", textResponse);
-                    errorMessage = `Registration failed. Server responded with status ${response.status}.`; // Use text if available? Maybe not safe.
-                }
+                // Handle 4xx/5xx errors using the parsed data or status text
+                console.error(`Server Error: ${response.status}`, responseData || responseText);
+                let errorMessage = `Registration failed. Status: ${response.status}`; // Default
+                 if (responseData) {
+                     // Prioritize specific message from backend JSON
+                    errorMessage = responseData.message ||
+                                   (Array.isArray(responseData.errors) ? responseData.errors.join(', ') : errorMessage);
+                 } else if (responseText) {
+                     // If we got text but couldn't parse as JSON (e.g., HTML 404 page)
+                     errorMessage = `Server Error: ${response.status}. Could not process response.`; // Avoid showing raw HTML
+                 }
                 setErrors({ server: errorMessage });
             }
 
         } catch (error) {
-            // Handle network errors
-            console.error("Submission network error:", error);
-            setErrors({ server: 'Network error during registration. Please check connection or server status.' });
+            // Handle network errors (fetch failure, CORS, etc.)
+            console.error("Submission Network/Fetch Error:", error);
+            // Check if it's an AbortError if you implement cancellation
+            // if (error.name === 'AbortError') { ... }
+             setErrors({ server: 'Network error: Could not connect to the server. Please check your connection.' });
         } finally {
             setLoading(false);
         }
     };
+    // --- *** END CORRECTED handleSubmit *** ---
 
-    // --- JSX ---
+
+    // --- JSX (No changes needed here, assuming it was correct) ---
     return (
-        // Assign the ref to the form element
         <div className={styles.container}>
             <h2>Join as a Student</h2>
             {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-            {/* Display server errors prominently */}
             {errors.server && <div className={styles.errorMessage} style={{ textAlign: 'center', marginBottom: '15px' }}>{errors.server}</div>}
 
             <form onSubmit={handleSubmit} encType="multipart/form-data" ref={formRef}>
@@ -165,8 +195,8 @@ function StudentRegistrationForm() {
                     <input
                         type="text" id="firstName" name="firstName"
                         value={formData.firstName} onChange={handleChange}
-                        required // Keep basic HTML5 validation
-                        aria-invalid={!!errors.firstName} // Accessibility hint
+                        required
+                        aria-invalid={!!errors.firstName}
                         aria-describedby={errors.firstName ? "firstNameError" : undefined}
                     />
                     {errors.firstName && <div id="firstNameError" className={styles.errorMessage}>{errors.firstName}</div>}
@@ -197,7 +227,7 @@ function StudentRegistrationForm() {
                      />
                     {errors.email && <div id="emailError" className={styles.errorMessage}>{errors.email}</div>}
                 </div>
-                
+
                 {/* Password */}
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Password:</label>
@@ -229,14 +259,12 @@ function StudentRegistrationForm() {
                     <label htmlFor="university">University/Institution:</label>
                     <select
                         id="university" name="university"
-                        value={formData.university} onChange={handleChange} // Use value from state
+                        value={formData.university} onChange={handleChange}
                         required
                         aria-invalid={!!errors.university}
                         aria-describedby={errors.university ? "universityError" : undefined}
                     >
-                        {/* Map over the universities array */}
                         {universities.map((uni) => (
-                            // Use uni.value for the option value, uni.name for display
                             <option key={uni.name} value={uni.value}>
                                 {uni.name}
                             </option>
@@ -253,7 +281,6 @@ function StudentRegistrationForm() {
                         value={formData.studentId} onChange={handleChange}
                         placeholder="e.g., 12345678"
                     />
-                    {/* No error display needed for optional field unless specific format required */}
                 </div>
 
                 {/* Graduation Year (Optional) */}
@@ -262,7 +289,7 @@ function StudentRegistrationForm() {
                     <input
                         type="number" id="graduationYear" name="graduationYear"
                         value={formData.graduationYear} onChange={handleChange}
-                        placeholder="e.g., 2025" min="1900" max="2100" // Add sensible min/max
+                        placeholder="e.g., 2025" min="1900" max="2100"
                     />
                 </div>
 
@@ -271,18 +298,17 @@ function StudentRegistrationForm() {
                     <label htmlFor="idCardPhoto">Upload ID Card Photo:</label>
                     <input
                         type="file" id="idCardPhoto" name="idCardPhoto"
-                        accept="image/jpeg, image/png, image/jpg" // Specify accepted types
-                        onChange={handleChange} // Handles file selection
+                        accept="image/jpeg, image/png, image/jpg"
+                        onChange={handleChange}
+                        required // Keep required here for client-side check
                         aria-invalid={!!errors.idCardPhoto}
                         aria-describedby={errors.idCardPhoto ? "idCardPhotoError" : undefined}
                     />
-                    {/* Display selected filename (optional) */}
-                    {/* {formData.idCardPhoto && <span>Selected: {formData.idCardPhoto.name}</span>} */}
                     {errors.idCardPhoto && <div id="idCardPhotoError" className={styles.errorMessage}>{errors.idCardPhoto}</div>}
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" disabled={loading}>
+                <button type="submit" disabled={loading} className={styles.submitButton}>
                     {loading ? 'Registering...' : 'Register'}
                 </button>
             </form>

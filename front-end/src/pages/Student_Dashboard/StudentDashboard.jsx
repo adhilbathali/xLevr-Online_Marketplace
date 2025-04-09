@@ -195,30 +195,33 @@ function StudentDashboard() {
             {/* --- Active Projects Section (Uses Demo Data for now) --- */}
             <section className={styles.dashboardSection}>
                  <h2>My Active Projects</h2>
-                 {activeProjects.length === 0 ? (
-                     <p>You have no active projects right now.</p>
-                 ) : (
-                     <div className={styles.projectList}>
-                         {activeProjects.map((proj) => (
-                              <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
-                                  {/* ... JSX for active projects remains the same for now ... */}
-                                   <div className={styles.cardHeader}>
-                                     <h3>{proj.title}</h3>
-                                     <Link to={`/chat/`} className={styles.msgLink} title={`Message ${proj.clientName}`}>
-                                         <MessageSquare size={20} />
-                                     </Link>
-                                 </div>
-                                 <p><strong>Client:</strong> {proj.clientName}</p>
-                                 <p><strong>Deadline:</strong> {proj.deadline}</p>
-                                 <p><strong>Status:</strong> {proj.status}</p>
-                                 <Link to={proj.workspaceUrl} className={styles.detailsLink}>
-                                     View Details / Workspace
-                                 </Link>
-                              </div>
-                         ))}
-                     </div>
-                 )}
-             </section>
+                {activeProjects.length === 0 ? (
+                    <p>You have no active projects right now.</p>
+                ) : (
+                    <div className={styles.projectList}>
+                        {activeProjects.map((proj) => (
+                            <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
+                                <div className={styles.cardHeader}>
+                                    <h3>{proj.title}</h3>
+                                    <Link
+                                        to={`/chat/`}
+                                        className={styles.msgLink}
+                                        title={`Message ${proj.clientName}`}
+                                    >
+                                        <MessageSquare size={20} />
+                                    </Link>
+                                </div>
+                                <p><strong>Client:</strong> {proj.clientName}</p>
+                                <p><strong>Deadline:</strong> {proj.deadline}</p>
+                                <p><strong>Status:</strong> {proj.status}</p>
+                                <Link to={proj.workspaceUrl} className={styles.detailsLink}>
+                                    View Details / Workspace
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </section>
 
             {/* --- Completed Projects Section (Uses Demo Data for now) --- */}
             <section className={styles.dashboardSection}>

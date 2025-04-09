@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CategoryGrid.module.css";
-import categories from "../../assets/categories.json";
+import categories from "../../assets/categories";
 
 export default function CategoryGrid() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,7 +36,7 @@ export default function CategoryGrid() {
             onClick={() => handleClick(category.name)}
             style={{ cursor: "pointer" }}
           >
-            {/* <img src={category.image} alt={category.name} /> */}
+            <img src={category.image} alt={category.name} />
             <h3>{category.name}</h3>
           </div>
         ))}
