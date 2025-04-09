@@ -1,20 +1,24 @@
-[
+
+import Copywriting from "./category-images/copy-wrting.png"
+import BlogWriting from "./category-images/blog.png"
+import TechnicalWriting from "./category-images/tech-wrt.jpg"
+const categories = [
   {
     "id": 1,
     "name": "Copywriting",
-    "image": "./images/content/copywriting.png",
+    "image": Copywriting,
     "mainCategory": "Content & Writing"
   },
   {
     "id": 2,
     "name": "Blog Writing",
-    "image": "./images/content/blog-writing.png",
+    "image": BlogWriting,
     "mainCategory": "Content & Writing"
   },
   {
     "id": 3,
     "name": "Technical Writing",
-    "image": "./images/content/technical-writing.png",
+    "image": TechnicalWriting,
     "mainCategory": "Content & Writing"
   },
   {
@@ -240,3 +244,5 @@
     "mainCategory": "Career & Education"
   }
 ]
+
+export default categories
