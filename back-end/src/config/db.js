@@ -8,11 +8,8 @@ const mongoose = require('mongoose');
 // require('dotenv').config({ path: envPath }); // REMOVE
 // --- End Removal ---
 
-<<<<<<< HEAD
  // Log the path for debugging
 require('dotenv').config();
-=======
->>>>>>> 5cfe5f4147ea2b2ed031ef3c36807c6d4e208895
 
 const connectDB = async () => {
   try {
