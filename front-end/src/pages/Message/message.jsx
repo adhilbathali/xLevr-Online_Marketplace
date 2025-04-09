@@ -1,29 +1,59 @@
 import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { Send, Smile, FileText, MessageSquare, Mic } from "lucide-react";
-import style from "./message.module.css"; 
+import { useParams } from "react-router-dom"; // For dynamic clientId from the URL
+import { Send, Smile, FileText, MessageSquare, Mic, StopCircle } from "lucide-react";
+import style from "./message.module.css";
 
 // Connect to Socket.IO server
 const socket = io();
 
 const Chat = () => {
+  const { clientId } = useParams(); // Retrieve clientId dynamically from the URL
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [file, setFile] = useState(null);
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [recordingTimer, setRecordingTimer] = useState(0);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    socket.on("chat message", (msg) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-    return () => socket.off("chat message");
-  }, []);
+    // Join a private room for the specific clientId
+    if (clientId) {
+      socket.emit("join room", clientId);
+
+      // Listen for incoming messages in the room
+      socket.on("chat message", (msg) => {
+        setMessages((prev) => [...prev, msg]);
+      });
+    }
+
+    return () => {
+      // Leave the room when the component unmounts
+      if (clientId) {
+        socket.emit("leave room", clientId);
+        socket.off("chat message");
+      }
+    };
+  }, [clientId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Timer logic for recording
+  useEffect(() => {
+    let timer;
+    if (recording) {
+      timer = setInterval(() => {
+        setRecordingTimer((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+      setRecordingTimer(0);
+    }
+    return () => clearInterval(timer);
+  }, [recording]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,9 +64,10 @@ const Chat = () => {
         timestamp: new Date().toLocaleTimeString(),
         isMine: true,
         type: "text",
+        clientId, // Include clientId for private communication
       };
       setMessages((prev) => [...prev, messageData]);
-      socket.emit("chat message", { ...messageData, isMine: false });
+      socket.emit("private message", messageData); // Send to server
       setInput("");
     }
 
@@ -49,9 +80,10 @@ const Chat = () => {
           timestamp: new Date().toLocaleTimeString(),
           isMine: true,
           type: "file",
+          clientId,
         };
         setMessages((prev) => [...prev, fileData]);
-        socket.emit("chat message", { ...fileData, isMine: false });
+        socket.emit("private message", fileData);
         setFile(null);
       };
       reader.readAsDataURL(file);
@@ -82,9 +114,10 @@ const Chat = () => {
           timestamp: new Date().toLocaleTimeString(),
           isMine: true,
           type: "audio",
+          clientId,
         };
         setMessages((prev) => [...prev, voiceMessage]);
-        socket.emit("chat message", { ...voiceMessage, isMine: false });
+        socket.emit("private message", voiceMessage);
         setRecording(false);
       };
 
@@ -95,12 +128,13 @@ const Chat = () => {
   const stopRecording = () => {
     mediaRecorder?.stop();
     setMediaRecorder(null);
+    setRecording(false);
   };
 
   return (
     <div className={style.container}>
       <h2 className={style.header}>
-        <MessageSquare style={{ marginRight: "8px" }} /> Real-Time Chat
+        <MessageSquare style={{ marginRight: "8px" }} /> Private Chat
       </h2>
       <div className={style.chatBox}>
         <ul className={style.messageList}>
@@ -127,6 +161,18 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </ul>
       </div>
+
+      {recording && (
+        <div className={style.recordingIndicator}>
+          <span>Recording... {recordingTimer}s</span>
+          <StopCircle
+            size={24}
+            color="red"
+            onClick={stopRecording}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      )}
 
       <form className={style.form} onSubmit={handleSubmit}>
         <button type="button" className={style.iconButton} title="Emoji (Coming soon)">
