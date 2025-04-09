@@ -1,43 +1,50 @@
-// routes/index.js (REQUIRED CORRECTION)
+// File: src/routes/index.js
+// *** CORRECTED ***
+
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); // Create an Express router instance
 
-const gigRouter = require('./gigRoutes');
+// --- Import Specific Route Modules ---
+const authRoutes = require('./authRoutes'); // Assuming authRoutes.js is in the same directory
+const gigRouter = require('./gigRoutes');     // Assuming gigRoutes.js is in the same directory
+// const productRoutes = require('./productRoutes'); // Example for other routes
 
-// --- Import Controllers and Middleware ---
-const { registerUser, verifyEmail } = require('../controllers/authController'); // Go up one level, then into controllers
-const { validateRegistration } = require('../middlewares/validation.js');   // Go up one level, then into middleware
-const handleUpload = require('../middlewares/upload.js');                // Go up one level, then into middleware
-// inside routes/index.js
+console.log('[Index Router] Mounting sub-routes...');
+
+// --- Mount the auth routes under the '/auth' path ---
+// This tells the mainRouter (mounted at /api in server.js) that any request
+// starting with '/api/auth' should be handled by the router from authRoutes.js
+router.use('/auth', authRoutes); // Correct prefix relative to /api
+console.log('[Index Router] Mounted /auth routes.');
+
+// --- Mount the gig routes under the '/gigs' path ---
+// This tells the mainRouter (mounted at /api in server.js) that any request
+// starting with '/api/gigs' should be handled by the router from gigRoutes.js
+router.use('/gigs', gigRouter); // Correct prefix relative to /api
+console.log('[Index Router] Mounted /gigs routes.');
+
+// --- Mount other routers if they exist ---
+// router.use('/products', productRoutes);
+// router.use('/users', userRoutes);
+
+
+// --- DO NOT DEFINE SPECIFIC ROUTES WITH FULL PATHS HERE ---
+/*
+// DELETE THIS BLOCK - These routes belong inside authRoutes.js or other specific routers
+const { registerUser, verifyEmail } = require('../controllers/authController');
+const { validateRegistration } = require('../middlewares/validation.js');
+const handleUpload = require('../middlewares/upload.js');
+
 router.post(
-    '/api/auth/register/student', // <--- THIS IS THE CORRECT PATH
+    '/api/auth/register/student', // <-- REMOVE THIS
     handleUpload,
     validateRegistration,
     registerUser
 );
+*/
+// --- END DELETE BLOCK ---
 
-router.use('/api/gigs', gigRouter);
 
-// ... rest of the file ...
-console.log("--- routes/index.js executing ---"); // Log for checking execution order
-
-// --- Import Specific Route Modules ---
-const authRoutes = require('./authRoutes'); // Import the routes defined in authRoutes.js
-
-console.log("--- routes/index.js: Imported authRoutes ---"); // Log import success
-
-// --- Mount Routers under specific base paths ---
-// This line tells express: "Any request starting with /api/auth should be handled by the authRoutes router"
-router.use('/api/auth', authRoutes);
-
-console.log("--- routes/index.js: Mounted /api/auth ---"); // Log mount success
-
-// --- DO NOT define routes like /api/auth/register/student directly here anymore ---
-// router.post('/api/auth/register/student', ...); // <--- DELETE THIS if it exists here
-
-// --- Mount other routers if you have them ---
-// Example: router.use('/api/users', require('./userRoutes'));
-
-// --- Export the main router ---
+// --- Export the configured router instance ---
 module.exports = router;
-console.log("--- routes/index.js: Exporting main router ---"); // Log export
+console.log('[Index Router] Exporting main router.');
