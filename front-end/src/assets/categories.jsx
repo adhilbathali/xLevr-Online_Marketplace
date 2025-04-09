@@ -2,6 +2,22 @@
 import Copywriting from "./category-images/copy-wrting.png"
 import BlogWriting from "./category-images/blog.png"
 import TechnicalWriting from "./category-images/tech-wrt.jpg"
+import graphic from "./category-images/graphic_design.png"
+import logo from "./category-images/logo-dis.jpg"
+import app from "./category-images/app.avif"
+import data_entry from "./category-images/data_entry.webp"
+import email from "./category-images/email-mark.webp"
+import game from "./category-images/game-dev.jpg"
+import podcast from "./category-images/podcast.jpg"
+import seo from "./category-images/seo.avif"
+import social_media from "./category-images/social-media-management.jpg"
+import voice from "./category-images/Voice Over.png"
+import vedio_edit from "./category-images/vedio-edit.jpg"
+import ui_ux from "./category-images/uiux.png"
+import web_development from "./category-images/web-development-concept-in-flat-style-vector.jpg"
+
+
+
 const categories = [
   {
     "id": 1,
@@ -24,79 +40,79 @@ const categories = [
   {
     "id": 4,
     "name": "Graphic Design",
-    "image": "./images/design/graphic-design.png",
+    "image":  graphic,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 5,
     "name": "Logo Design",
-    "image": "./images/design/logo-design.png",
+    "image": logo,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 6,
     "name": "UI/UX Design",
-    "image": "./images/design/uiux.png",
+    "image": ui_ux,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 7,
     "name": "Video Editing",
-    "image": "./images/media/video-editing.png",
+    "image": vedio_edit,
     "mainCategory": "Media & Production"
   },
   {
     "id": 8,
     "name": "Podcast Editing",
-    "image": "./images/media/podcast-editing.png",
+    "image": podcast,
     "mainCategory": "Media & Production"
   },
   {
     "id": 9,
     "name": "Voice Over",
-    "image": "./images/media/voiceover.png",
+    "image": voice,
     "mainCategory": "Media & Production"
   },
   {
     "id": 10,
     "name": "Social Media Management",
-    "image": "./images/marketing/social-media.png",
+    "image": social_media,
     "mainCategory": "Marketing & Advertising"
   },
   {
     "id": 11,
     "name": "SEO Optimization",
-    "image": "./images/marketing/seo.png",
+    "image": seo,
     "mainCategory": "Marketing & Advertising"
   },
   {
     "id": 12,
     "name": "Email Marketing",
-    "image": "./images/marketing/email-marketing.png",
+    "image": email,
     "mainCategory": "Marketing & Advertising"
   },
   {
     "id": 13,
     "name": "Web Development",
-    "image": "./images/tech/web-development.png",
+    "image": web_development,
     "mainCategory": "Tech & Programming"
   },
   {
     "id": 14,
     "name": "App Development",
-    "image": "./images/tech/app-development.png",
+    "image": app,
     "mainCategory": "Tech & Programming"
   },
   {
     "id": 15,
     "name": "Game Development",
-    "image": "./images/tech/game-development.png",
+    "image": game,
     "mainCategory": "Tech & Programming"
   },
   {
     "id": 16,
     "name": "Data Entry",
-    "image": "./images/virtual/data-entry.png",
+    "image":data_entry,
     "mainCategory": "Virtual Assistance"
   },
   {
@@ -122,24 +138,6 @@ const categories = [
     "name": "Presentation Design",
     "image": "./images/education/presentation.png",
     "mainCategory": "Career & Education"
-  },
-  {
-    "id": 21,
-    "name": "Academic Tutoring",
-    "image": "./images/education/tutoring.png",
-    "mainCategory": "Career & Education"
-  },
-  {
-    "id": 22,
-    "name": "Finance Consulting",
-    "image": "./images/business/finance.png",
-    "mainCategory": "Business & Finance"
-  },
-  {
-    "id": 23,
-    "name": "Pitch Deck Creation",
-    "image": "./images/business/pitch-deck.png",
-    "mainCategory": "Business & Finance"
   },
   {
     "id": 24,
