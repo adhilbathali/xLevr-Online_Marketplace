@@ -30,7 +30,7 @@ const gigSchema = new mongoose.Schema({
   // Hybrid Matching Logic
   topMatchedStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }], // All 10 students
   notifiedStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],   // Current batch (3 students)
-  acceptedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Student", default: "" }, // If anyone accepts
+  acceptedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Student", default: null }, // If anyone accepts
   batchPointer: { type: Number, default: 0 , enum: [0, 1, 2, 3]}, // Tracks current batch index
   offerExpiresAt: { type: Date }, // Deadline for batch to respond
 
