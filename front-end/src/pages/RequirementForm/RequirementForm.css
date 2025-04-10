@@ -1,94 +1,284 @@
-.form-container {
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fefefe;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
+/* --- RequirementForm.css --- */
+
+/* Basic Reset & Variables */
+:root {
+  --primary-color: #007bff; /* Blue */
+  --secondary-color: #6c757d; /* Gray */
+  --success-color: #28a745; /* Green */
+  --error-color: #dc3545; /* Red */
+  --light-gray-color: #f8f9fa;
+  --dark-gray-color: #343a40;
+  --border-color: #ced4da;
+  --input-bg: #fff;
+  --input-focus-border: #80bdff;
+  --input-invalid-border: var(--error-color);
+  --button-text-color: #fff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  color: var(--dark-gray-color);
+  background-color: var(--light-gray-color); /* Light background for context */
+  margin: 0;
+  padding: 20px; /* Add padding to body for spacing */
+}
+
+/* Form Container */
+.requirement-form {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.requirement-form h2 {
+  text-align: center;
+  color: var(--dark-gray-color);
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Form Groups & Labels */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+/* Input Fields & Textarea */
+.requirement-form input[type="text"],
+.requirement-form input[type="email"], /* Add if you have email */
+.requirement-form input[type="url"],
+.requirement-form input[type="date"],
+.requirement-form input[type="number"],
+.requirement-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Important */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background-color: var(--input-bg);
+}
+
+.requirement-form input[type="text"]:focus,
+.requirement-form input[type="email"]:focus,
+.requirement-form input[type="url"]:focus,
+.requirement-form input[type="date"]:focus,
+.requirement-form input[type="number"]:focus,
+.requirement-form textarea:focus {
+  border-color: var(--input-focus-border);
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.requirement-form textarea {
+  resize: vertical; /* Allow vertical resize only */
+  min-height: 100px;
+}
+
+/* Read-only Input Style (e.g., Category) */
+.requirement-form input:read-only {
+  background-color: #e9ecef; /* Slightly different background */
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Invalid Input Styling */
+.requirement-form input:invalid, /* Basic browser validation */
+.requirement-form textarea:invalid,
+.requirement-form input[aria-invalid="true"], /* Custom validation */
+.requirement-form textarea[aria-invalid="true"] {
+  border-color: var(--input-invalid-border);
+}
+
+.requirement-form input[aria-invalid="true"]:focus,
+.requirement-form textarea[aria-invalid="true"]:focus {
+   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+
+/* Dynamic Array Fields */
+.dynamic-field {
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 20px; /* Consistent with form-group */
+  background-color: #fdfdfd; /* Slightly different background */
+}
+
+.dynamic-field label {
+   margin-bottom: 15px; /* More space below the main label */
+}
+
+.array-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Space between array items */
+}
+
+.array-input input {
+  flex-grow: 1; /* Input takes available space */
+  margin-right: 10px;
+}
+
+/* Add/Remove Buttons for Dynamic Fields */
+.add-btn,
+.remove-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.remove-btn {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red */
+  border: 1px solid #f5c6cb;
+}
+
+.remove-btn:hover {
+  background-color: #f5c6cb;
+}
+
+.add-btn {
+  background-color: #e2e6ea; /* Light gray */
+  color: #343a40;
+  border: 1px solid #dae0e5;
+  margin-top: 10px; /* Space above add button */
+  display: inline-block; /* Allow margin-top */
+}
+
+.add-btn:hover {
+  background-color: #dae0e5;
+}
+
+/* Error Messages */
+.error {
+  color: var(--error-color);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block; /* Ensure it takes its own line */
+}
+
+/* Array item specific error (if needed for alignment) */
+.array-item-error {
+  flex-basis: 100%; /* Make error span full width below input/button */
+  margin-left: 0; /* Align with input start */
+  margin-top: 2px;
+  margin-bottom: 5px; /* Space before next array item */
+}
+/* Reposition array errors slightly */
+.array-input + .array-item-error {
+  margin-top: -5px; /* Pull up closer to the input */
+  margin-bottom: 10px;
+}
+
+
+/* Form Actions (Submit Button & Status Messages) */
+.form-actions {
+  margin-top: 30px;
+  text-align: center; /* Center submit button and messages */
+}
+
+.submit-btn {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.submit-btn:disabled {
+  background-color: var(--secondary-color);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Submission Status Messages */
+.form-success,
+.form-error { /* General status messages */
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.form-success {
+  color: #155724; /* Dark green text */
+  background-color: #d4edda; /* Light green background */
+  border: 1px solid #c3e6cb;
+}
+
+.form-error { /* For general submission errors */
+  color: #721c24; /* Dark red text */
+  background-color: #f8d7da; /* Light red background */
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
+  .requirement-form {
+    padding: 20px;
   }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #333;
+
+  .requirement-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
   }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
+
+  .requirement-form input[type="text"],
+  .requirement-form input[type="email"],
+  .requirement-form input[type="url"],
+  .requirement-form input[type="date"],
+  .requirement-form input[type="number"],
+  .requirement-form textarea {
+    padding: 10px 12px;
+    font-size: 0.95rem;
   }
-  
-  label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #444;
-  }
-  
-  input[type="text"],
-  input[type="url"],
-  input[type="date"] {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+
+  .submit-btn {
+    padding: 10px 25px;
     font-size: 1rem;
   }
-  
-  .array-field {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 0.5rem;
+
+  .array-input {
+    /* Stack input and button vertically if needed, or just adjust sizing */
+    /* flex-direction: column;
+    align-items: stretch; */
   }
-  
-  .array-field input {
-    flex: 1;
+
+ /* .array-input input {
+    margin-right: 0;
+    margin-bottom: 5px;
+  } */
+
+  .add-btn,
+  .remove-btn {
+     padding: 6px 10px;
+     font-size: 0.85rem;
   }
-  
-  .array-field button {
-    padding: 0.4rem 0.8rem;
-    background-color: #eee;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .array-field button:hover {
-    background-color: #ddd;
-  }
-  
-  button[type="button"] {
-    margin-top: 0.3rem;
-    background-color: #f0f0f0;
-    border: 1px solid #bbb;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button[type="button"]:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .submit-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #0077cc;
-    color: white;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 1rem;
-  }
-  
-  .submit-btn:hover {
-    background-color: #005fa3;
-  }
-  
-  .error {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-  }
-  
+}
