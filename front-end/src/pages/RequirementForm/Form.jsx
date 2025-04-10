@@ -1,164 +1,192 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./RequirementForm.css";
 
-const userID = JSON.parse(localStorage.getItem("user")).id;
-console.log(userID);
-
-const initialForm = {
-  createdBy: userID,
-  category: "",
-  companyTitle: "",
-  projectTitle: "",
-  projectDescription: "",
-  expectedDeliverables: [""],
-  deadline: "",
-  projectBudget: "",
-  referenceLinks: [""],
-  additionalNote: "",
-};
-
 const RequirementForm = () => {
-  const [form, setForm] = useState(initialForm);
+  const navigate = useNavigate();
+  const [form, setForm] = useState(null);
   const [errors, setErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  // Autofill category from localStorage
   useEffect(() => {
-    const savedCategory = localStorage.getItem("selectedCategory");
-    if (savedCategory) {
-      setForm((prev) => ({ ...prev, category: savedCategory }));
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.id) {
+      navigate("/login");
+    } else {
+      setForm({
+        createdBy: user.id,
+        category: "",
+        companyTitle: "",
+        projectTitle: "",
+        projectDescription: "",
+        expectedDeliverables: [""],
+        deadline: "",
+        projectBudget: "",
+        referenceLinks: [""],
+        additionalNote: "",
+      });
+
+      const savedCategory = localStorage.getItem("selectedCategory");
+      if (savedCategory) {
+        setForm((prevForm) => ({
+          ...prevForm,
+          category: savedCategory,
+        }));
+      }
     }
-  }, []);
+  }, [navigate]);
+
+  if (!form) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
 
-  const handleArrayChange = (name, index, value) => {
-    const updated = [...form[name]];
-    updated[index] = value;
-    setForm((prev) => ({ ...prev, [name]: updated }));
+  const handleArrayChange = (e, index, field) => {
+    const newArray = [...form[field]];
+    newArray[index] = e.target.value;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [field]: newArray,
+    }));
   };
 
-  const addToArray = (name) => {
-    setForm((prev) => ({ ...prev, [name]: [...prev[name], ""] }));
+  const handleAddField = (field) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [field]: [...prevForm[field], ""],
+    }));
   };
 
-  const removeFromArray = (name, index) => {
-    const updated = [...form[name]];
-    updated.splice(index, 1);
-    setForm((prev) => ({ ...prev, [name]: updated }));
+  const handleRemoveField = (field, index) => {
+    const newArray = form[field].filter((_, i) => i !== index);
+    setForm((prevForm) => ({
+      ...prevForm,
+      [field]: newArray,
+    }));
   };
 
-  const validateLocal = () => {
-    const newErrors = {};
-    if (!form.category.trim()) newErrors.category = "Category is required";
-    if (!form.companyTitle.trim()) newErrors.companyTitle = "Company title is required";
-    if (!form.projectTitle.trim()) newErrors.projectTitle = "Project title is required";
-    if (!form.projectDescription.trim()) newErrors.projectDescription = "Project description is required";
-    if (!form.expectedDeliverables.length || form.expectedDeliverables.some((d) => !d.trim()))
-      newErrors.expectedDeliverables = "All expected deliverables must be filled";
+  const validate = () => {
+    let newErrors = {};
+    if (!form.companyTitle) newErrors.companyTitle = "Company Title is required";
+    if (!form.projectTitle) newErrors.projectTitle = "Project Title is required";
+    if (!form.projectDescription) newErrors.projectDescription = "Project Description is required";
     if (!form.deadline) newErrors.deadline = "Deadline is required";
-    if (!form.projectBudget || isNaN(form.projectBudget)) newErrors.projectBudget = "Valid budget is required";
-
-    form.referenceLinks.forEach((link, i) => {
-      if (link.trim()) {
-        try {
-          new URL(link);
-        } catch {
-          newErrors[`referenceLinks-${i}`] = "Invalid URL";
-        }
-      }
-    });
-
-    return newErrors;
+    if (!form.projectBudget) newErrors.projectBudget = "Project Budget is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validateLocal();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSubmitStatus(null);
-      return;
-    }
+    if (!validate()) return;
 
     try {
-      const response = await axios.post("http://localhost:5000/api/gigs/postgig", form);
-      console.log("Submitted:", response.data);
+      const res = await axios.post("/api/requirements", form); // update with your API
       setSubmitStatus("success");
-      setForm(initialForm);
-      localStorage.removeItem("selectedCategory");
-    } catch (error) {
-      console.error("Submission error:", error);
+    } catch (err) {
+      console.error(err);
       setSubmitStatus("error");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h2>Submit Your Project Requirements</h2>
+    <form className="requirement-form" onSubmit={handleSubmit}>
+      <h2>Submit Your Project Requirement</h2>
 
-      {[
-        { label: "Category", name: "category" },
-        { label: "Company Title", name: "companyTitle" },
-        { label: "Project Title", name: "projectTitle" },
-        { label: "Project Description", name: "projectDescription" },
-        { label: "Deadline", name: "deadline", type: "date" },
-        { label: "Project Budget", name: "projectBudget" },
-        { label: "Additional Note", name: "additionalNote" },
-      ].map(({ label, name, type = "text" }) => (
-        <div className="form-group" key={name}>
-          <label>{label}</label>
-          <input
-            type={type}
-            name={name}
-            value={form[name]}
-            onChange={handleChange}
-            readOnly={name === "category"}
-          />
-          {errors[name] && <p className="error">{errors[name]}</p>}
-        </div>
-      ))}
+      <input
+        type="text"
+        name="companyTitle"
+        placeholder="Company Title"
+        value={form.companyTitle}
+        onChange={handleChange}
+      />
+      {errors.companyTitle && <span className="error">{errors.companyTitle}</span>}
 
-      <div className="form-group">
+      <input
+        type="text"
+        name="projectTitle"
+        placeholder="Project Title"
+        value={form.projectTitle}
+        onChange={handleChange}
+      />
+      {errors.projectTitle && <span className="error">{errors.projectTitle}</span>}
+
+      <textarea
+        name="projectDescription"
+        placeholder="Project Description"
+        value={form.projectDescription}
+        onChange={handleChange}
+      />
+      {errors.projectDescription && <span className="error">{errors.projectDescription}</span>}
+
+      <div className="dynamic-field">
         <label>Expected Deliverables</label>
-        {form.expectedDeliverables.map((item, i) => (
-          <div key={i} className="array-field">
+        {form.expectedDeliverables.map((item, index) => (
+          <div key={index} className="array-input">
             <input
               type="text"
               value={item}
-              onChange={(e) => handleArrayChange("expectedDeliverables", i, e.target.value)}
+              onChange={(e) => handleArrayChange(e, index, "expectedDeliverables")}
             />
-            <button type="button" onClick={() => removeFromArray("expectedDeliverables", i)}>Remove</button>
+            {index > 0 && (
+              <button type="button" onClick={() => handleRemoveField("expectedDeliverables", index)}>Remove</button>
+            )}
           </div>
         ))}
-        <button type="button" onClick={() => addToArray("expectedDeliverables")}>Add Deliverable</button>
-        {errors.expectedDeliverables && <p className="error">{errors.expectedDeliverables}</p>}
+        <button type="button" onClick={() => handleAddField("expectedDeliverables")}>Add More</button>
       </div>
 
-      <div className="form-group">
+      <input
+        type="date"
+        name="deadline"
+        value={form.deadline}
+        onChange={handleChange}
+      />
+      {errors.deadline && <span className="error">{errors.deadline}</span>}
+
+      <input
+        type="number"
+        name="projectBudget"
+        placeholder="Project Budget"
+        value={form.projectBudget}
+        onChange={handleChange}
+      />
+      {errors.projectBudget && <span className="error">{errors.projectBudget}</span>}
+
+      <div className="dynamic-field">
         <label>Reference Links</label>
-        {form.referenceLinks.map((link, i) => (
-          <div key={i} className="array-field">
+        {form.referenceLinks.map((item, index) => (
+          <div key={index} className="array-input">
             <input
               type="url"
-              value={link}
-              onChange={(e) => handleArrayChange("referenceLinks", i, e.target.value)}
+              value={item}
+              onChange={(e) => handleArrayChange(e, index, "referenceLinks")}
             />
-            <button type="button" onClick={() => removeFromArray("referenceLinks", i)}>Remove</button>
-            {errors[`referenceLinks-${i}`] && <p className="error">{errors[`referenceLinks-${i}`]}</p>}
+            {index > 0 && (
+              <button type="button" onClick={() => handleRemoveField("referenceLinks", index)}>Remove</button>
+            )}
           </div>
         ))}
-        <button type="button" onClick={() => addToArray("referenceLinks")}>Add Link</button>
+        <button type="button" onClick={() => handleAddField("referenceLinks")}>Add More</button>
       </div>
 
-      <button type="submit" className="submit-btn">Submit</button>
+      <textarea
+        name="additionalNote"
+        placeholder="Additional Notes (optional)"
+        value={form.additionalNote}
+        onChange={handleChange}
+      />
 
-      {submitStatus === "success" && <p className="success-msg">Form submitted successfully!</p>}
-      {submitStatus === "error" && <p className="error-msg">Submission failed. Please try again.</p>}
+      <button type="submit">Submit</button>
+
+      {submitStatus === "success" && <p className="success">Form submitted successfully!</p>}
+      {submitStatus === "error" && <p className="error">Something went wrong. Try again.</p>}
     </form>
   );
 };

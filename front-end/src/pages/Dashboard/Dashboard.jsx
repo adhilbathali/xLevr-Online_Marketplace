@@ -2,27 +2,14 @@
 // *** FINAL VERSION: Fetches user data, renders full UI conditionally ***
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 // Ensure the CSS module import is correct and uncommented
 import styles from './Dashboard.module.css';
 import { MessageSquare } from 'lucide-react';
+import axios from 'axios';
 
 // Define your backend API Base URL (MUST MATCH backend port and Login.jsx)
 const API_BASE_URL = 'http://localhost:5000'; // <-- ADJUST PORT IF NEEDED
-
-// --- DEMO data for project sections (Remove/replace when fetching real data) ---
-const initialInvitations = [
-    { id: 'proj123', title: 'Build a Simple Landing Page', description: 'Need a responsive landing page using HTML/CSS.', skills: ['HTML', 'CSS'], budget: '$150', deadline: '2024-08-15', clientName: 'Demo Startup Inc.' },
-    { id: 'proj456', title: 'React Component Development', description: 'Create reusable React components for our library.', skills: ['React', 'JavaScript'], budget: '$40/hr', deadline: '2024-08-20', clientName: 'Demo Tech Solutions' },
-];
-const initialActiveProjects = [
-    { id: 'proj789', title: 'Blog Post Writing', clientName: 'Demo Content Creators', deadline: '2024-08-10', status: 'In Progress', workspaceUrl: '/demo-projects/proj789' },
-];
-const initialCompletedProjects = [
-    { id: 'proj001', title: 'Logo Design', clientName: 'Demo Marketing Co.', completionDate: '2024-07-25', amountEarned: '$100' },
-];
-// --- End DEMO Project Data ---
 
 
 function Dashboard() {
@@ -35,26 +22,50 @@ function Dashboard() {
     const [invitations, setInvitations] = useState([]);
     const [activeProjects, setActiveProjects] = useState([]);
     const [completedProjects, setCompletedProjects] = useState([]);
+    const [unacceptedProjects, setUnacceptedProjects] = useState([]);
+
+    const user = JSON.parse(localStorage.getItem("authUser"));
+
+    const fetchGigs = async () => {
+      try {
+          console.log("🚀 Starting axios request...");
+
+          if (!user || !user.role || !user.id) {
+              throw new Error("User info missing from localStorage");
+          }
+
+          if (user.role === "student") {
+              const response = await axios.get(`http://localhost:5000/api/gigs/student/dashboard/${user.id}`);
+              console.log("✅ Student gigs received:", response.data);
+
+              setInvitations(response.data.notifiedGigs);
+              setActiveProjects(response.data.acceptedGigs);
+              setCompletedProjects(response.data.completedGigs);
+          } else if (user.role === "professional") {
+              const response = await axios.get(`http://localhost:5000/api/gigs/professional/dashboard/${user.id}`);
+              console.log("✅ Professional gigs received:", response.data);
+
+              setActiveProjects(response.data.activeGigs);
+              setCompletedProjects(response.data.completedGigs);
+              setUnacceptedProjects(response.data.unacceptedGigs);
+          } else {
+              throw new Error("Invalid user role.");
+          }
+
+      } catch (err) {
+          console.error("❌ Axios Error:", err.response?.data || err.message || err);
+          setError("Failed to fetch gigs.");
+      } finally {
+          setLoading(false);
+      }
+  };
+
 
 
     useEffect(() => {
-        // Get user object from localStorage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const userId = JSON.parse(localStorage.getItem("user")).id;
+      fetchGigs();
+    }, [user.id]);
     
-          // Fetch data using userId
-          axios.get(`http://localhost:5000/api/student/dashboard/${userId}`)
-            .then(response => {
-                const { notifiedGigs, acceptedGigs } = response.data;
-                setInvitations(notifiedGigs);
-                setActiveProjects(acceptedGigs);
-            })
-            .catch(error => {
-              console.error('Error fetching dashboard data:', error);
-            });
-        }
-      }, []);
 
     useEffect(() => {
         // console.log("Dashboard mounting. Fetching user data..."); // Keep logs if helpful
@@ -114,10 +125,61 @@ function Dashboard() {
         fetchUserData();
     }, [navigate]); // Dependency array
 
-    // --- Demo Action Handlers (Keep temporarily) ---
-     const handleAccept = (projectId) => { console.log("Demo Accept:", projectId); /* ... demo logic ... */ };
-     const handleReject = (projectId) => { console.log("Demo Reject:", projectId); /* ... demo logic ... */ };
+    // handle accept and reject work
+    const handleAccept = async (gigId) => {
+        try {
+          console.log("📡 Sending accept request for gig:", gigId);
+      
+          const response = await axios.post(`http://localhost:5000/api/gigs/accept/${gigId}`, {
+            "studentId": `${JSON.parse(localStorage.getItem("authUser"))?.id}`,
 
+          });
+      
+          console.log("✅ Gig accepted:", response.data);
+          fetchGigs(); // refetch data if function is passed
+        } catch (error) {
+          const errMsg = error.response?.data || "❌ Failed to accept gig.";
+          console.error("❌ Error accepting gig:", errMsg);
+          setError(errMsg);
+        }
+      };
+
+      const handleReject = async (gigId) => {
+        try {
+          const response = await axios.post(
+            `http://localhost:5000/api/gigs/reject/${gigId}`,
+            { studentId : `${JSON.parse(localStorage.getItem("authUser"))?.id}` }, // Sending the student ID in the body
+          );
+      
+          setSuccess("Gig rejected successfully.");
+          fetchGigs(); // Refresh the list of gigs after rejection
+        } catch (err) {
+          console.error("❌ Reject Gig Error:", err.response?.data || err.message);
+          setError("Failed to reject gig.");
+        }
+      };
+
+    // handle approve
+    const handleApprove = async (gigId) => {
+        try {
+          console.log("📡 Sending approve request for gig:", gigId);
+      
+          const response = await axios.post(
+            `http://localhost:5000/api/gigs/approve/${gigId}`,
+            {
+              professionalId: `${JSON.parse(localStorage.getItem("authUser"))?.id}`,
+            }
+          );
+      
+          console.log("✅ Gig approved:", response.data);
+          fetchGigs(); // Refresh data after approval
+        } catch (error) {
+          const errMsg = error.response?.data || "❌ Failed to approve gig.";
+          console.error("❌ Error approving gig:", errMsg);
+          setError(errMsg);
+        }
+      };      
+      
 
     // --- RENDER LOGIC ---
     // 1. Show Loading Indicator
@@ -217,13 +279,13 @@ function Dashboard() {
                                 <div key={inv.id} className={styles.projectCard}>
                                      <h3>{inv.title}</h3>
                                      <p className={styles.description}>{inv.description}</p>
-                                     <p><strong>Skills:</strong> {inv.skills.join(', ')}</p>
-                                     <p><strong>Budget:</strong> {inv.budget}</p>
-                                     <p><strong>Deadline:</strong> {inv.deadline}</p>
+                                     <p><strong>Skills:</strong> {inv.refinedFilters.RS.join(', ')}</p>
+                                     <p><strong>Budget:</strong> {inv.projectBudget}</p>
+                                     <p><strong>Deadline:</strong> {inv.deadline.slice(0, 10)}</p>
                                      {inv.clientName && <p><strong>Client:</strong> {inv.clientName}</p>}
                                      <div className={styles.actionButtons}>
-                                         <button onClick={() => handleAccept(inv.id)} className={`${styles.button} ${styles.accept}`}>Accept Work</button>
-                                         <button onClick={() => handleReject(inv.id)} className={`${styles.button} ${styles.reject}`}>Reject</button>
+                                         <button onClick={() => handleAccept(inv._id)} className={`${styles.button} ${styles.accept}`}>Accept Work</button>
+                                         <button onClick={() => handleReject(inv._id)} className={`${styles.button} ${styles.reject}`}>Reject</button>
                                      </div>
                                 </div>
                             ))}
@@ -250,50 +312,124 @@ function Dashboard() {
                 </section>
              )}
 
-            {/* --- Active Projects Section (Uses Demo Data for now) --- */}
-            <section className={styles.dashboardSection}>
-                 <h2>My Active Projects</h2>
-                  {/* TODO: Replace with actual fetch/render logic for role-specific active projects */}
-                 {activeProjects.length === 0 ? (<p>No active projects.</p>) : (
-                     <div className={styles.projectList}>
-                         {activeProjects.map((proj) => (
-                              <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
-                                   <div className={styles.cardHeader}>
-                                     <h3>{proj.title}</h3>
-                                     <Link to={`/chat/`} className={styles.msgLink} title={`Message ${proj.clientName}`}> {/* TODO: Use actual chat link */}
-                                         <MessageSquare size={20} />
-                                     </Link>
-                                 </div>
-                                 <p><strong>Client:</strong> {proj.clientName}</p>
-                                 <p><strong>Deadline:</strong> {proj.deadline}</p>
-                                 <p><strong>Status:</strong> {proj.status}</p>
-                                 <Link to={proj.workspaceUrl} className={styles.detailsLink}>
-                                     View Details / Workspace
-                                 </Link>
-                              </div>
-                         ))}
-                     </div>
-                 )}
-             </section>
+            {/* == STUDENT: Active + Completed Projects == */}
+{userData.role === 'student' && (
+  <>
+    {/* --- Active Projects Section (Student) --- */}
+    <section className={styles.dashboardSection}>
+      <h2>My Active Projects</h2>
+      {activeProjects.length === 0 ? (
+        <p>No active projects.</p>
+      ) : (
+        <div className={styles.projectList}>
+          {activeProjects.map((proj) => (
+            <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
+              <div className={styles.cardHeader}>
+                <h3>{proj.projectTitle}</h3>
+                <Link to={`/chat/`} className={styles.msgLink} title={`Message ${proj.companyTitle}`}>
+                  <MessageSquare size={20} />
+                </Link>
+              </div>
+              <p><strong>Client:</strong> {proj.companyTitle}</p>
+              <p><strong>Deadline:</strong> {proj.deadline.slice(0, 10)}</p>
+              <p><strong>Status:</strong> {proj.status}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+
+    {/* --- Completed Projects Section (Student) --- */}
+    <section className={styles.dashboardSection}>
+      <h2>Completed Projects</h2>
+      {completedProjects.length === 0 ? (
+        <p>No completed projects.</p>
+      ) : (
+        <div className={styles.projectList}>
+          {completedProjects.map((proj) => (
+            <div key={proj.id} className={`${styles.projectCard} ${styles.completedProject}`}>
+              <h3>{proj.title}</h3>
+              <p><strong>Client:</strong> {proj.companyTitle}</p>
+              <p><strong>Completed:</strong> {proj.deadline.slice(0, 10)}</p>
+              <p><strong>Earned:</strong> {proj.projectBudget}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </>
+)}
+
+{/* == PROFESSIONAL: Active + Completed Projects == */}
+{userData.role === 'professional' && (
+  <>
+
+    {/* --- Awaiting Student Acceptance Section --- */}
+    <section className={styles.dashboardSection}>
+      <h2>Awaiting Student Acceptance</h2>
+      {unacceptedProjects.length === 0 ? (
+        <p>No pending invitations.</p>
+      ) : (
+        <div className={styles.projectList}>
+          {unacceptedProjects.map((proj) => (
+            <div key={proj.id} className={`${styles.projectCard} ${styles.awaitingProject}`}>
+              <h3>{proj.projectTitle}</h3>
+              <p><strong>Posted On:</strong> {proj.createdAt.slice(0, 10)}</p>
+              <p><strong>Budget:</strong> {proj.projectBudget}</p>
+              <p><strong>Skills Required:</strong> {proj.refinedFilters.RS.join(', ')}</p>
+              <p><strong>Deadline:</strong> {proj.deadline.slice(0, 10)}</p>
+              <p><strong>Status:</strong> {proj.status}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
 
 
-            {/* --- Completed Projects Section (Uses Demo Data for now) --- */}
-            <section className={styles.dashboardSection}>
-                <h2>Completed Projects</h2>
-                 {/* TODO: Replace with actual fetch/render logic for role-specific completed projects */}
-                 {completedProjects.length === 0 ? (<p>No completed projects.</p>) : (
-                     <div className={styles.projectList}>
-                         {completedProjects.map((proj) => (
-                              <div key={proj.id} className={`${styles.projectCard} ${styles.completedProject}`}>
-                                  <h3>{proj.title}</h3>
-                                 <p><strong>Client:</strong> {proj.clientName}</p>
-                                 <p><strong>Completed:</strong> {proj.completionDate}</p>
-                                 <p><strong>Earned:</strong> {proj.amountEarned}</p>
-                              </div>
-                         ))}
-                     </div>
-                 )}
-            </section>
+    {/* --- Active Projects Section (Professional) --- */}
+    <section className={styles.dashboardSection}>
+      <h2>Pending Approvals</h2>
+      {activeProjects.length === 0 ? (
+        <p>No active projects.</p>
+      ) : (
+        <div className={styles.projectList}>
+          {activeProjects.map((proj) => (
+            <div key={proj.id} className={`${styles.projectCard} ${styles.activeProject}`}>
+              <div className={styles.cardHeader}>
+                <h3>{proj.projectTitle}</h3>
+              </div>
+              <p><strong>Client:</strong> {proj.companyTitle}</p>
+              <p><strong>Deadline:</strong> {proj.deadline.slice(0, 10)}</p>
+              <button className={styles.approveBtn} onClick={() => handleApprove(proj._id)}>
+                Approve Work
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+
+    {/* --- Completed Projects Section (Professional) --- */}
+    <section className={styles.dashboardSection}>
+      <h2>Completed Projects</h2>
+      {completedProjects.length === 0 ? (
+        <p>No completed projects.</p>
+      ) : (
+        <div className={styles.projectList}>
+          {completedProjects.map((proj) => (
+            <div key={proj.id} className={`${styles.projectCard} ${styles.completedProject}`}>
+              <h3>{proj.projectTitle}</h3>
+              <p><strong>Client:</strong> {proj.companyTitle}</p>
+              <p><strong>Completed:</strong> {proj.deadline?.slice(0, 10)}</p>
+              <p><strong>Earned:</strong> {`₹${proj.projectBudget}`}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </>
+)}
+
 
         </div>
     );

@@ -175,3 +175,29 @@
 .msgLink:hover {
     color: #007bff;
 }
+
+.approveBtn {
+    background-color: #28a745; /* green for approval */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .approveBtn:hover {
+    background-color: #218838;
+  }
+  
+  .approveBtn:active {
+    transform: scale(0.97);
+  }
+  
+  .approveBtn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
