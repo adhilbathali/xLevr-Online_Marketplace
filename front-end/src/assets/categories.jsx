@@ -1,4 +1,3 @@
-
 import Copywriting from "./category-images/copy-wrting.png"
 import BlogWriting from "./category-images/blog.png"
 import TechnicalWriting from "./category-images/tech-wrt.jpg"
@@ -14,7 +13,27 @@ import social_media from "./category-images/social-media-management.jpg"
 import voice from "./category-images/Voice Over.png"
 import vedio_edit from "./category-images/vedio-edit.jpg"
 import ui_ux from "./category-images/uiux.png"
-import web_development from "./category-images/web-development-concept-in-flat-style-vector.jpg"
+// import web_development from "./category-images/web-development-concept-in-flat-style-vector.jpg"
+import vertual_assis from "./category-images/vertual_assis.jpg"
+import Market_Research from "./category-images/Market_Research.jpg"
+import Resume_Building from "./category-images/Resume_Building.jpg"
+import Presentation_Design from "./category-images/Presentation_Design.webp" 
+import Business_Plan_Writing from "./category-images/business_plan.jpg"
+import illustration from "./category-images/illustration.jpg"
+import Photo_Editing from "./category-images/Photo_Editing.jpg"
+import Language_Translation from "./category-images/Language_Translation.webp"
+import Transcription from "./category-images/Transcription.jpg"
+import Proofreading from "./category-images/Proofreading.jpg"
+import Scripting from "./category-images/Scripting.jpg"
+import Excel_Automation from "./category-images/Excel_Automation.webp"
+import AI_Tools_Support from "./category-images/AI_Tools_Support.jpg"
+import D_Modeling from "./category-images/D_Modeling.jpg"
+import DigitalMarketing from "./category-images/DigitalMarketing.png"
+import CustomerSupport from "./category-images/CustomerSupport.png"
+import EbookDesign from "./category-images/EbookDesign.jpg"
+import WhiteboardAnimation from "./category-images/WhiteboardAnimation.png"
+import SMMAdsCampaign from "./category-images/SMMAdsCampaign.jpg"
+import Voice_Coaching from "./category-images/Voice Coaching.png"
 
 
 
@@ -91,12 +110,12 @@ const categories = [
     "image": email,
     "mainCategory": "Marketing & Advertising"
   },
-  {
-    "id": 13,
-    "name": "Web Development",
-    "image": web_development,
-    "mainCategory": "Tech & Programming"
-  },
+  // {
+  //   "id": 13,
+  //   "name": "Web Development",
+  //   "image": web_development,
+  //   "mainCategory": "Tech & Programming"
+  // },
   {
     "id": 14,
     "name": "App Development",
@@ -118,127 +137,127 @@ const categories = [
   {
     "id": 17,
     "name": "Virtual Assistance",
-    "image": "./images/virtual/va.png",
+    "image": vertual_assis,
     "mainCategory": "Virtual Assistance"
   },
   {
     "id": 18,
     "name": "Market Research",
-    "image": "./images/virtual/market-research.png",
+    "image": Market_Research,
     "mainCategory": "Virtual Assistance"
   },
   {
     "id": 19,
     "name": "Resume Building",
-    "image": "./images/education/resume.png",
+    "image": Resume_Building,
     "mainCategory": "Career & Education"
   },
   {
     "id": 20,
     "name": "Presentation Design",
-    "image": "./images/education/presentation.png",
+    "image": Presentation_Design,
     "mainCategory": "Career & Education"
   },
   {
     "id": 24,
     "name": "Business Plan Writing",
-    "image": "./images/business/business-plan.png",
+    "image": Business_Plan_Writing,
     "mainCategory": "Business & Finance"
   },
   {
     "id": 25,
     "name": "Illustration",
-    "image": "./images/design/illustration.png",
+    "image": illustration,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 26,
     "name": "Photo Editing",
-    "image": "./images/media/photo-editing.png",
+    "image": Photo_Editing,
     "mainCategory": "Media & Production"
   },
   {
     "id": 27,
     "name": "Language Translation",
-    "image": "./images/language/translation.png",
+    "image": Language_Translation,
     "mainCategory": "Languages"
   },
   {
     "id": 28,
     "name": "Transcription",
-    "image": "./images/language/transcription.png",
+    "image": Transcription,
     "mainCategory": "Languages"
   },
   {
     "id": 29,
     "name": "Proofreading",
-    "image": "./images/content/proofreading.png",
+    "image": Proofreading,
     "mainCategory": "Content & Writing"
   },
   {
     "id": 30,
     "name": "Scripting",
-    "image": "./images/content/scripting.png",
+    "image": Scripting,
     "mainCategory": "Content & Writing"
   },
   {
     "id": 31,
     "name": "Excel Automation",
-    "image": "./images/tech/excel.png",
+    "image": Excel_Automation,
     "mainCategory": "Tech & Programming"
   },
   {
     "id": 32,
     "name": "AI Tools Support",
-    "image": "./images/tech/ai.png",
+    "image": AI_Tools_Support,
     "mainCategory": "Tech & Programming"
   },
   {
     "id": 33,
     "name": "3D Modeling",
-    "image": "./images/design/3d-modeling.png",
+    "image": D_Modeling,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 34,
     "name": "Digital Marketing",
-    "image": "./images/marketing/digital-marketing.png",
+    "image": DigitalMarketing,
     "mainCategory": "Marketing & Advertising"
   },
   {
     "id": 35,
     "name": "Customer Support",
-    "image": "./images/virtual/customer-support.png",
+    "image": CustomerSupport,
     "mainCategory": "Virtual Assistance"
   },
   {
     "id": 36,
     "name": "Ebook Design",
-    "image": "./images/content/ebook.png",
+    "image": EbookDesign,
     "mainCategory": "Content & Writing"
   },
   {
     "id": 37,
     "name": "Whiteboard Animation",
-    "image": "./images/media/whiteboard.png",
+    "image": WhiteboardAnimation,
     "mainCategory": "Media & Production"
   },
   {
     "id": 38,
     "name": "Infographic Design",
-    "image": "./images/design/infographic.png",
+    "image": WhiteboardAnimation,
     "mainCategory": "Design & Creativity"
   },
   {
     "id": 39,
     "name": "SMM Ads Campaign",
-    "image": "./images/marketing/ads.png",
+    "image": SMMAdsCampaign,
     "mainCategory": "Marketing & Advertising"
   },
   {
     "id": 40,
     "name": "Voice Coaching",
-    "image": "./images/education/voice-coaching.png",
+    "image": Voice_Coaching,
     "mainCategory": "Career & Education"
   }
 ]
