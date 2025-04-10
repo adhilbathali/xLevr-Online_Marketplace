@@ -1,7 +1,8 @@
 const Gig = require("../models/gigModel");
+const { BATCH_SIZE, EXPIRY_HOURS } = require("../services/cron/hybridQueManagement");
 
 const rejectGig = async (req, res) => {
-    const studentId = req.user._id;
+    const { studentId } = req.body;
     const gig = await Gig.findById(req.params.id);
 
     gig.notifiedStudents = gig.notifiedStudents.filter(

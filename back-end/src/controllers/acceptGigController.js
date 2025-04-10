@@ -1,7 +1,7 @@
 const Gig = require("../models/gigModel");
 
 const acceptGig = async (req, res) => {
-    const studentId = req.user._id;
+    const { studentId } = req.body;
   const gig = await Gig.findById(req.params.id);
 
   if (!gig.notifiedStudents.includes(studentId)) {

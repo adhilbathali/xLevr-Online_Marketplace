@@ -68,8 +68,14 @@ const StudentUserSchema = new mongoose.Schema({
     // verificationTokenExpires: Date,
     skills: [String],
 pastCompletedSkills: [String],
-expertise: Number,
-completionSpeed: Number,
+expertise: {
+    type: Number,
+    default: 1,
+  },
+  completionSpeed: {
+    type: Number,
+    default: 2,
+  },
 walletBalance: {
     type: Number,
     default: 0

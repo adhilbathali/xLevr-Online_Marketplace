@@ -37,7 +37,7 @@ const gigSchema = new mongoose.Schema({
   // Status Tracking
   status: {
     type: String,
-    enum: ["pending", "assigned", "expired", "unassigned"],
+    enum: ["pending", "assigned", "expired", "unassigned", "completed"],
     default: "pending"
   }
 });
