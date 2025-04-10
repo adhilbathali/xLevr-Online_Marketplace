@@ -1,3 +1,70 @@
-.how-it-works-div{
-    background-color: orange;
+/* Styles for the How It Works page */
+
+.container {
+    padding: 2rem;
+    font-family: "Arial", sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #262728;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #2a2a2b;
+    margin-top: 1rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+ol li {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+ul li {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.callToAction {
+    text-align: center;
+    margin-top: 2rem;
+    font-weight: bold;
+    color: #101010;
+    font-size: 1.25rem;
 }
